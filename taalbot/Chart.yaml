@@ -1,0 +1,14 @@
+apiVersion: v1
+name: taalbot
+version: 0.1.0
+appVersion: 0.1.0
+description: Discord bot for Dutch language learning.
+type: application
+keywords:
+- bot
+- discord
+- language
+sources:
+- https://github.com/SpecialFlocon/taalbot
+maintainers:
+- name: SpécialFlocon
