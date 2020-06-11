@@ -24,87 +24,30 @@ spec:
         {{- end }}
         {{- end }}
         env:
-        {{- if .Values.taalbot.application.publicURL }}
-        - name: TAALBOT_APPLICATION_PUBLIC_URL
-          value: {{ .Values.taalbot.application.publicURL }}
+        {{- if .Values.taalbot.application.apiServerURL }}
+        - name: TAALBOT_APPLICATION_API_SERVER_URL
+          value: {{ .Values.taalbot.application.apiServerURL }}
         {{- end }}
-        {{- if .Values.taalbot.application.debug }}
-        - name: TAALBOT_APPLICATION_DEBUG
-          value: {{ .Values.taalbot.application.debug | quote }}
-        {{- end }}
-        - name: TAALBOT_COOKIES_ENCRYPTION_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.taalbot.secretName }}
-              key: cookie-encrypt-key
-        - name: TAALBOT_COOKIES_SIGNING_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.taalbot.secretName }}
-              key: cookie-sign-key
         - name: TAALBOT_DISCORD_BOT_TOKEN
           valueFrom:
             secretKeyRef:
               name: {{ .Values.taalbot.secretName }}
               key: bot-token
-        - name: TAALBOT_DISCORD_OAUTH2_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.taalbot.secretName }}
-              key: oauth2-client-id
-        - name: TAALBOT_DISCORD_OAUTH2_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.taalbot.secretName }}
-              key: oauth2-client-secret
-        {{- if .Values.taalbot.httpServer.allowedOrigins }}
-        - name: TAALBOT_HTTP_SERVER_ALLOWED_ORIGINS
-          value: {{ .Values.taalbot.httpServer.allowedOrigins }}
+        {{- if .Values.taalbot.httpClient.tls.enabled }}
+        - name: TAALBOT_HTTP_CLIENT_TLS_ENABLE
+          value: {{ .Values.taalbot.httpClient.tls.enabled | quote }}
         {{- end }}
-        {{- if .Values.taalbot.httpServer.socketAddress.portNumber }}
-        - name: TAALBOT_HTTP_SERVER_LISTEN_ADDRESS
-          value: {{ include "taalbot.httpServer.listenAddress" . }}
+        {{- if .Values.taalbot.httpClient.tls.caCert }}
+        - name: TAALBOT_HTTP_CLIENT_TLS_CA_CERTIFICATE
+          value: {{ .Values.taalbot.httpClient.tls.caCert }}
         {{- end }}
-        {{- if .Values.taalbot.httpServer.tls.enabled }}
-        - name: TAALBOT_HTTP_SERVER_TLS_ENABLE
-          value: {{ .Values.taalbot.httpServer.tls.enabled | quote }}
+        {{- if .Values.taalbot.httpClient.tls.cert }}
+        - name: TAALBOT_HTTP_CLIENT_TLS_CERTIFICATE
+          value: {{ .Values.taalbot.httpClient.tls.cert }}
         {{- end }}
-        {{- if .Values.taalbot.httpServer.tls.caCert }}
-        - name: TAALBOT_HTTP_SERVER_TLS_CA_CERTIFICATE
-          value: {{ .Values.taalbot.httpServer.tls.caCert }}
-        {{- end }}
-        {{- if .Values.taalbot.httpServer.tls.cert }}
-        - name: TAALBOT_HTTP_SERVER_TLS_CERTIFICATE
-          value: {{ .Values.taalbot.httpServer.tls.cert }}
-        {{- end }}
-        {{- if .Values.taalbot.httpServer.tls.key }}
-        - name: TAALBOT_HTTP_SERVER_TLS_KEY
-          value: {{ .Values.taalbot.httpServer.tls.key }}
-        {{- end }}
-        {{- if .Values.taalbot.mongodb.address }}
-        - name: TAALBOT_MONGODB_ADDRESS
-          value: {{ .Values.taalbot.mongodb.address }}
-        {{- end }}
-        {{- if .Values.taalbot.mongodb.database }}
-        - name: TAALBOT_MONGODB_DATABASE
-          value: {{ .Values.taalbot.mongodb.database }}
-        {{- end }}
-        {{- if .Values.taalbot.mongodb.username }}
-        - name: TAALBOT_MONGODB_USERNAME
-          value: {{ .Values.taalbot.mongodb.username }}
-        {{- end }}
-        - name: TAALBOT_MONGODB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.taalbot.mongodb.secretName }}
-              key: {{ .Values.taalbot.mongodb.secretPasswordKey }}
-        {{- if .Values.taalbot.webapp.assetsDirectory }}
-        - name: TAALBOT_WEBAPP_ASSETS_DIRECTORY
-          value: {{ .Values.taalbot.webapp.assetsDirectory }}
-        {{- end }}
-        {{- if .Values.taalbot.webapp.templatesDirectory }}
-        - name: TAALBOT_WEBAPP_TEMPLATES_DIRECTORY
-          value: {{ .Values.taalbot.webapp.templatesDirectory }}
+        {{- if .Values.taalbot.httpClient.tls.key }}
+        - name: TAALBOT_HTTP_CLIENT_TLS_KEY
+          value: {{ .Values.taalbot.httpClient.tls.key }}
         {{- end }}
         {{- if .Values.taalbot.livenessProbe }}
         livenessProbe: {{- toYaml .Values.taalbot.livenessProbe | trim | nindent 10 }}
@@ -112,19 +55,16 @@ spec:
         {{- if .Values.taalbot.readinessProbe }}
         readinessProbe: {{- toYaml .Values.taalbot.readinessProbe | trim | nindent 10 }}
         {{- end }}
-        ports:
-        - name: taalbot-http
-          containerPort: {{ .Values.taalbot.httpServer.socketAddress.portNumber }}
         resources: {{- toYaml .Values.taalbot.resources | trim | nindent 10 }}
-        {{- if .Values.taalbot.httpServer.tls.enabled }}
+        {{- if .Values.taalbot.httpClient.tls.enabled }}
         volumeMounts:
         - name: taalbot-tls
-          mountPath: {{ .Values.taalbot.httpServer.tls.mountPath }}
+          mountPath: {{ .Values.taalbot.httpClient.tls.mountPath }}
           readOnly: true
         {{- end }}
-      {{- if .Values.imagePullSecrets }}
+      {{- if .Values.taalbot.image.pullSecrets }}
       imagePullSecrets:
-      {{- range .Values.imagePullSecrets }}
+      {{- range .Values.taalbot.image.pullSecrets }}
       - name: {{ . }}
       {{- end }}
       {{- end }}
@@ -132,10 +72,10 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
         fsGroup: 65534
-      {{- if .Values.taalbot.httpServer.tls.enabled }}
+      {{- if .Values.taalbot.httpClient.tls.enabled }}
       volumes:
       - name: taalbot-tls
         secret:
           defaultMode: 0640
-          secretName: {{ .Values.taalbot.httpServer.tls.secretName }}
+          secretName: {{ .Values.taalbot.httpClient.tls.secretName }}
       {{- end }}

@@ -15,28 +15,14 @@ taalbot:
 
   ## Application configuration
   application:
-    ## Debug mode
-    ## When this parameter is set to true, all origins are allowed to make HTTP requests,
-    ## and CSRF token verification is disabled.
-    debug: ""
+    ## URL to a working taalapi server
+    ## Matches the public URL parameter from taalapi chart
+    apiServerURL: ""
 
-    ## The front-facing URL of taalbot, which clients can use to reach this instance.
-    publicURL: ""
-
-  ## HTTP server configuration
-  httpServer:
-    ## List of origins that are allowed to make HTTP requests to the server,
-    ## separated by space.
-    allowedOrigins: ""
-
-    ## HTTP server listen address and port number
-    socketAddress:
-      address: ""
-      portNumber: ""
-
-    ## HTTP server TLS configuration
+  ## HTTP client configuration
+  httpClient:
+    ## TLS configuration
     tls:
-      ## Enable or disable TLS
       enabled: ""
 
       ## Name of the secret that contains TLS certificate chain files
@@ -54,49 +40,18 @@ taalbot:
       ## Path to key file within the container
       key: ""
 
-  ## taalbot health check
+  ## taalbot container health check
   livenessProbe: {}
   readinessProbe: {}
 
-  ## taalbot container resources
+  ## Resource requests and limits
   resources:
     limits:
-      memory: 256Mi
-      cpu: 200m
+      memory: 64Mi
+      cpu: 100m
     requests:
       memory: 64Mi
-      cpu: 50m
+      cpu: 100m
 
-  ## MongoDB parameters
-  mongodb:
-    ## Address of the MongoDB server to use
-    address: ""
-
-    ## Name of the database to use
-    database: ""
-
-    ## Database user
-    username: ""
-
-    ## Name of the secret containing Redis password
-    secretName: ""
-
-    ## Key in which the password is stored
-    secretPasswordKey: ""
-
-  ## Name of the secret containing taalbot secret keys, as specified in the README.
+  ## Name of the secret containing taalbot secret data, as specified in the README.
   secretName: ""
-
-  ## taalbot service configuration
-  service:
-    enabled: true
-    ports:
-      http: 8080
-
-  ## taaldashboard web application
-  webapp:
-    ## Path of directory containing static assets
-    assetsDirectory: ""
-
-    ## Path of directory containing HTML templates
-    templatesDirectory: ""

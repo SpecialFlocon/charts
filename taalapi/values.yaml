@@ -1,0 +1,105 @@
+## Image pull secrets
+imagePullSecrets: []
+
+## Extra labels to add to resources
+extraLabels: {}
+
+## taalapi configuration
+taalapi:
+  ## Image configuration for deployment
+  image:
+    registry: docker.io
+    repository: specialflocon/taalapi
+    pullPolicy: Always
+    args: ["run"]
+
+  ## Application configuration
+  application:
+    ## URL to taaldashboard SPA, used for redirections.
+    dashboardURL: ""
+
+    ## Debug mode
+    ## When this parameter is set to true, all origins are allowed to make HTTP requests,
+    ## and CSRF token verification is disabled.
+    debug: ""
+
+    ## The front-facing URL of taalapi, which clients can use to reach this instance.
+    publicURL: ""
+
+  ## HTTP server configuration
+  httpServer:
+    ## List of origins that are allowed to make HTTP requests to the server,
+    ## separated by space.
+    allowedOrigins: ""
+
+    ## HTTP server listen address and port number
+    socketAddress:
+      address: ""
+      portNumber: ""
+
+    ## taaldashboard SPA parameters
+    spa:
+      ## Enable/disable serving SPA with taalapi
+      serve: ""
+
+      ## Filesystem path to the directory containing SPA files
+      filesystemPath: ""
+
+    ## TLS configuration
+    tls:
+      ## Enable or disable TLS
+      enabled: ""
+
+      ## Name of the secret that contains TLS certificate chain files
+      secretName: ""
+
+      ## Secret mountpoint within the container
+      mountPath: ""
+
+      ## Path to CA certificate file within the container
+      caCert: ""
+
+      ## Path to certificate file within the container
+      cert: ""
+
+      ## Path to key file within the container
+      key: ""
+
+  ## taalapi health check
+  livenessProbe: {}
+  readinessProbe: {}
+
+  ## taalapi container resources
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 200m
+    requests:
+      memory: 256Mi
+      cpu: 200m
+
+  ## MongoDB parameters
+  mongodb:
+    ## Address of the MongoDB server to use
+    address: ""
+
+    ## Name of the database to use
+    database: ""
+
+    ## Database user
+    username: ""
+
+    ## Name of the secret containing Redis password
+    secretName: ""
+
+    ## Key in which the password is stored
+    secretPasswordKey: ""
+
+  ## Name of the secret containing taalapi secret keys, as specified in the README.
+  secretName: ""
+
+  ## taalapi service configuration
+  service:
+    enabled: true
+    ports:
+      http: 8080

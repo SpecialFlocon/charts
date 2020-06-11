@@ -1,8 +1,8 @@
 apiVersion: v1
-name: taalbot
+name: taalapi
 version: 0.1.0
 appVersion: 0.1.0
-description: A Discord bot for Dutch language learning servers.
+description: Backend server for taalbot
 type: application
 keywords:
 - bot

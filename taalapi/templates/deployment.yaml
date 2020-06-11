@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "taalapi.fullname" . }}
+  labels: {{ include "taalapi.commonLabels" . | trim | nindent 4 }}
+{{- if .Values.extraLabels }}
+{{ toYaml .Values.extraLabels | trim | indent 4 }}
+{{- end }}
+spec:
+  selector:
+    matchLabels: {{ include "taalapi.selectorLabels" . | trim | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ include "taalapi.selectorLabels" . | trim | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ template "taalapi.name" . }}
+        image: {{ template "taalapi.image" . }}
+        imagePullPolicy: {{ .Values.taalapi.image.pullPolicy }}
+        {{- if .Values.taalapi.image.args }}
+        args:
+        {{- range .Values.taalapi.image.args }}
+        - {{ . }}
+        {{- end }}
+        {{- end }}
+        env:
+        {{- if .Values.taalapi.application.dashboardURL }}
+        - name: TAALAPI_APPLICATION_DASHBOARD_URL
+          value: {{ .Values.taalapi.application.dashboardURL }}
+        {{- end }}
+        {{- if .Values.taalapi.application.debug }}
+        - name: TAALAPI_APPLICATION_DEBUG
+          value: {{ .Values.taalapi.application.debug | quote }}
+        {{- end }}
+        {{- if .Values.taalapi.application.publicURL }}
+        - name: TAALAPI_APPLICATION_PUBLIC_URL
+          value: {{ .Values.taalapi.application.publicURL }}
+        {{- end }}
+        - name: TAALAPI_COOKIES_ENCRYPTION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalapi.secretName }}
+              key: cookie-encrypt-key
+        - name: TAALAPI_COOKIES_SIGNING_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalapi.secretName }}
+              key: cookie-sign-key
+        - name: TAALAPI_DISCORD_OAUTH2_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalapi.secretName }}
+              key: oauth2-client-id
+        - name: TAALAPI_DISCORD_OAUTH2_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalapi.secretName }}
+              key: oauth2-client-secret
+        {{- if .Values.taalapi.httpServer.allowedOrigins }}
+        - name: TAALAPI_HTTP_SERVER_ALLOWED_ORIGINS
+          value: {{ .Values.taalapi.httpServer.allowedOrigins }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.socketAddress.portNumber }}
+        - name: TAALAPI_HTTP_SERVER_LISTEN_ADDRESS
+          value: {{ include "taalapi.httpServer.listenAddress" . }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.spa.serve }}
+        - name: TAALAPI_HTTP_SERVER_SPA_SERVE
+          value: {{ .Values.taalapi.httpServer.spa.serve | quote }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.spa.filesystemPath }}
+        - name: TAALAPI_HTTP_SERVER_SPA_FILESYSTEM_PATH
+          value: {{ .Values.taalapi.httpServer.spa.filesystemPath }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.tls.enabled }}
+        - name: TAALAPI_HTTP_SERVER_TLS_ENABLE
+          value: {{ .Values.taalapi.httpServer.tls.enabled | quote }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.tls.caCert }}
+        - name: TAALAPI_HTTP_SERVER_TLS_CA_CERTIFICATE
+          value: {{ .Values.taalapi.httpServer.tls.caCert }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.tls.cert }}
+        - name: TAALAPI_HTTP_SERVER_TLS_CERTIFICATE
+          value: {{ .Values.taalapi.httpServer.tls.cert }}
+        {{- end }}
+        {{- if .Values.taalapi.httpServer.tls.key }}
+        - name: TAALAPI_HTTP_SERVER_TLS_KEY
+          value: {{ .Values.taalapi.httpServer.tls.key }}
+        {{- end }}
+        {{- if .Values.taalapi.mongodb.address }}
+        - name: TAALAPI_MONGODB_ADDRESS
+          value: {{ .Values.taalapi.mongodb.address }}
+        {{- end }}
+        {{- if .Values.taalapi.mongodb.database }}
+        - name: TAALAPI_MONGODB_DATABASE
+          value: {{ .Values.taalapi.mongodb.database }}
+        {{- end }}
+        {{- if .Values.taalapi.mongodb.username }}
+        - name: TAALAPI_MONGODB_USERNAME
+          value: {{ .Values.taalapi.mongodb.username }}
+        {{- end }}
+        - name: TAALAPI_MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalapi.mongodb.secretName }}
+              key: {{ .Values.taalapi.mongodb.secretPasswordKey }}
+        {{- if .Values.taalapi.livenessProbe }}
+        livenessProbe: {{- toYaml .Values.taalapi.livenessProbe | trim | nindent 10 }}
+        {{- end }}
+        {{- if .Values.taalapi.readinessProbe }}
+        readinessProbe: {{- toYaml .Values.taalapi.readinessProbe | trim | nindent 10 }}
+        {{- end }}
+        ports:
+        - name: taalapi-http
+          containerPort: {{ .Values.taalapi.httpServer.socketAddress.portNumber }}
+        resources: {{- toYaml .Values.taalapi.resources | trim | nindent 10 }}
+        {{- if .Values.taalapi.httpServer.tls.enabled }}
+        volumeMounts:
+        - name: taalapi-tls
+          mountPath: {{ .Values.taalapi.httpServer.tls.mountPath }}
+          readOnly: true
+        {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+      {{- if .Values.taalapi.httpServer.tls.enabled }}
+      volumes:
+      - name: taalapi-tls
+        secret:
+          defaultMode: 0640
+          secretName: {{ .Values.taalapi.httpServer.tls.secretName }}
+      {{- end }}
