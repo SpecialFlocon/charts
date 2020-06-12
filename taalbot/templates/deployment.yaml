@@ -49,6 +49,15 @@ spec:
         - name: TAALBOT_HTTP_CLIENT_TLS_KEY
           value: {{ .Values.taalbot.httpClient.tls.key }}
         {{- end }}
+        {{- if .Values.taalbot.redis.address }}
+        - name: TAALBOT_REDIS_ADDRESS
+          value: {{ .Values.taalbot.redis.address }}
+        {{- end }}
+        - name: TAALBOT_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalbot.redis.secretName }}
+              key: {{ .Values.taalbot.redis.secretPasswordKey }}
         {{- if .Values.taalbot.livenessProbe }}
         livenessProbe: {{- toYaml .Values.taalbot.livenessProbe | trim | nindent 10 }}
         {{- end }}

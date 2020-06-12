@@ -81,6 +81,9 @@ their default values.
 | `taalapi.mongodb.username`                    | Name of the database user                                                                 | `""`                                          |
 | `taalapi.mongodb.secretName`                  | Name of the secret containing database password                                           | `""`                                          |
 | `taalapi.mongodb.secretPasswordKey`           | Name of the key holding the password within the secret                                    | `""`                                          |
+| `taalapi.redis.address`                       | Address of the Redis server used as message broker                                        | `""`                                          |
+| `taalapi.redis.secretName`                    | Name of the secret containing Redis password                                              | `""`                                          |
+| `taalapi.redis.secretPasswordKey`             | Name of the key holding the password within the secret                                    | `""`                                          |
 | `taalapi.secretName`                          | Name of the secret containing taalapi secret data                                         | `""`                                          |
 | `taalapi.service.enabled`                     | Enable/disable taalapi service                                                            | `true`                                        |
 | `taalapi.service.ports.http`                  | Service port number for taalapi HTTP server (see below)                                   | `8080`                                        |
@@ -170,7 +173,16 @@ taalapi stores its data in a MongoDB database. You need to point it towards a
 MongoDB instance using the `taalapi.mongodb.*` parameters.
 
 To let taalapi authenticate to MongoDB, you need to set the
-`taalapi.mongodb.existingSecret` and `taalapi.mongodb.secretPasswordKey`
-parameters, respectively corresponding to the name of the Kubernetes secret
-containing MongoDB credentials and the name of the key containing the database
-password.
+`taalapi.mongodb.secretName` and `taalapi.mongodb.secretPasswordKey` parameters,
+respectively corresponding to the name of the Kubernetes secret containing
+MongoDB credentials and the name of the key containing the database password.
+
+## Redis
+
+Taalbot uses Redis message broker capabilities to implement a PubSub message
+queue between components.
+
+You need to set the `taalapi.redis.address` parameter with the address to a
+running Redis server, as well as the `taalapi.redis.secretName` and
+`taalapi.redis.secretPasswordKey` parameters, respectively corresponding to the
+name of the secret and the name of the key containing the Redis password.

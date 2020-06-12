@@ -89,6 +89,17 @@ taalapi:
     ## Database user
     username: ""
 
+    ## Name of the secret containing MongoDB password
+    secretName: ""
+
+    ## Key in which the password is stored
+    secretPasswordKey: ""
+
+  ## Redis parameters
+  redis:
+    ## Address of the Redis server to use
+    address: ""
+
     ## Name of the secret containing Redis password
     secretName: ""
 

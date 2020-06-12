@@ -105,6 +105,15 @@ spec:
             secretKeyRef:
               name: {{ .Values.taalapi.mongodb.secretName }}
               key: {{ .Values.taalapi.mongodb.secretPasswordKey }}
+        {{- if .Values.taalapi.redis.address }}
+        - name: TAALAPI_REDIS_ADDRESS
+          value: {{ .Values.taalapi.redis.address }}
+        {{- end }}
+        - name: TAALAPI_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalapi.redis.secretName }}
+              key: {{ .Values.taalapi.redis.secretPasswordKey }}
         {{- if .Values.taalapi.livenessProbe }}
         livenessProbe: {{- toYaml .Values.taalapi.livenessProbe | trim | nindent 10 }}
         {{- end }}

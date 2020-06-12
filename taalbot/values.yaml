@@ -40,6 +40,17 @@ taalbot:
       ## Path to key file within the container
       key: ""
 
+  ## Redis parameters
+  redis:
+    ## Address of the Redis server to use
+    address: ""
+
+    ## Name of the secret containing Redis password
+    secretName: ""
+
+    ## Key in which the password is stored
+    secretPasswordKey: ""
+
   ## taalbot container health check
   livenessProbe: {}
   readinessProbe: {}

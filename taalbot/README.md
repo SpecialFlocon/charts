@@ -72,6 +72,9 @@ their default values.
 | `taalbot.httpClient.tls.caCert`        | Path to a TLS CA certificate file                                                      | `""`                                          |
 | `taalbot.httpClient.tls.cert`          | Path to a TLS certificate file                                                         | `""`                                          |
 | `taalbot.httpClient.tls.key`           | Path to a TLS key file                                                                 | `""`                                          |
+| `taalbot.redis.address`                | Address of the Redis server used as message broker                                     | `""`                                          |
+| `taalbot.redis.secretName`             | Name of the secret containing Redis password                                           | `""`                                          |
+| `taalbot.redis.secretPasswordKey`      | Name of the key holding the password within the secret                                 | `""`                                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm
@@ -92,23 +95,28 @@ $ helm install --name my-release -f values.yaml ./helm-charts/taalbot
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-## Deployment guide
-
-Before you install this chart, there are a few prerequisite steps to follow,
-which are described below.
-
-### API server URL
+## API server URL
 
 The `taalbot.apiServerURL` parameter must point to a working `taalapi` instance.
 
-### Secrets
+## Secrets
 
 This chart relies on a secret that must contain at least one key, `bot-token`,
 with plain-text token obtained from Discord Developer Portal. See Discord
 [documentation](https://discord.com/developers/docs/topics/oauth2#bots) for more
 information.
 
-### Liveness and readiness probes
+## Redis
+
+Taalbot uses Redis message broker capabilities to implement a PubSub message
+queue between components.
+
+You need to set the `taalbot.redis.address` parameter with the address to a
+running Redis server, as well as the `taalbot.redis.secretName` and
+`taalbot.redis.secretPasswordKey` parameters, respectively corresponding to the
+name of the secret and the name of the key containing the Redis password.
+
+## Liveness and readiness probes
 
 As of now, this chart does not set any liveness or readiness probes by default,
 but you can set them yourself, by overriding the corresponding parameters.
