@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: {{ template "taalbot.name" . }}
-        image: {{ template "taalbot.image" . }}
+        image: specialflocon/taalbot:latest
         imagePullPolicy: {{ .Values.taalbot.image.pullPolicy }}
         {{- if .Values.taalbot.image.args }}
         args:
@@ -24,40 +24,32 @@ spec:
         {{- end }}
         {{- end }}
         env:
-        {{- if .Values.taalbot.application.apiServerURL }}
-        - name: TAALBOT_APPLICATION_API_SERVER_URL
-          value: {{ .Values.taalbot.application.apiServerURL }}
+        {{- if .Values.taalbot.bot.commandPrefix }}
+        - name: TAALBOT_BOT_COMMAND_PREFIX
+          value: {{ .Values.taalbot.bot.commandPrefix }}
         {{- end }}
         - name: TAALBOT_DISCORD_BOT_TOKEN
           valueFrom:
             secretKeyRef:
               name: {{ .Values.taalbot.secretName }}
               key: bot-token
-        {{- if .Values.taalbot.httpClient.tls.enabled }}
-        - name: TAALBOT_HTTP_CLIENT_TLS_ENABLE
-          value: {{ .Values.taalbot.httpClient.tls.enabled | quote }}
+        {{- if .Values.taalbot.mongodb.address }}
+        - name: TAALBOT_MONGODB_ADDRESS
+          value: {{ .Values.taalbot.mongodb.address }}
         {{- end }}
-        {{- if .Values.taalbot.httpClient.tls.caCert }}
-        - name: TAALBOT_HTTP_CLIENT_TLS_CA_CERTIFICATE
-          value: {{ .Values.taalbot.httpClient.tls.caCert }}
+        {{- if .Values.taalbot.mongodb.database }}
+        - name: TAALBOT_MONGODB_DATABASE
+          value: {{ .Values.taalbot.mongodb.database }}
         {{- end }}
-        {{- if .Values.taalbot.httpClient.tls.cert }}
-        - name: TAALBOT_HTTP_CLIENT_TLS_CERTIFICATE
-          value: {{ .Values.taalbot.httpClient.tls.cert }}
+        {{- if .Values.taalbot.mongodb.username }}
+        - name: TAALBOT_MONGODB_USERNAME
+          value: {{ .Values.taalbot.mongodb.username }}
         {{- end }}
-        {{- if .Values.taalbot.httpClient.tls.key }}
-        - name: TAALBOT_HTTP_CLIENT_TLS_KEY
-          value: {{ .Values.taalbot.httpClient.tls.key }}
-        {{- end }}
-        {{- if .Values.taalbot.redis.address }}
-        - name: TAALBOT_REDIS_ADDRESS
-          value: {{ .Values.taalbot.redis.address }}
-        {{- end }}
-        - name: TAALBOT_REDIS_PASSWORD
+        - name: TAALBOT_MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.taalbot.redis.secretName }}
-              key: {{ .Values.taalbot.redis.secretPasswordKey }}
+              name: {{ .Values.taalbot.mongodb.secretName }}
+              key: {{ .Values.taalbot.mongodb.secretPasswordKey }}
         {{- if .Values.taalbot.livenessProbe }}
         livenessProbe: {{- toYaml .Values.taalbot.livenessProbe | trim | nindent 10 }}
         {{- end }}
@@ -65,12 +57,6 @@ spec:
         readinessProbe: {{- toYaml .Values.taalbot.readinessProbe | trim | nindent 10 }}
         {{- end }}
         resources: {{- toYaml .Values.taalbot.resources | trim | nindent 10 }}
-        {{- if .Values.taalbot.httpClient.tls.enabled }}
-        volumeMounts:
-        - name: taalbot-tls
-          mountPath: {{ .Values.taalbot.httpClient.tls.mountPath }}
-          readOnly: true
-        {{- end }}
       {{- if .Values.taalbot.image.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.taalbot.image.pullSecrets }}
@@ -81,10 +67,3 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
         fsGroup: 65534
-      {{- if .Values.taalbot.httpClient.tls.enabled }}
-      volumes:
-      - name: taalbot-tls
-        secret:
-          defaultMode: 0640
-          secretName: {{ .Values.taalbot.httpClient.tls.secretName }}
-      {{- end }}

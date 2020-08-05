@@ -13,44 +13,6 @@ taalbot:
     pullPolicy: Always
     args: ["run"]
 
-  ## Application configuration
-  application:
-    ## URL to a working taalapi server
-    ## Matches the public URL parameter from taalapi chart
-    apiServerURL: ""
-
-  ## HTTP client configuration
-  httpClient:
-    ## TLS configuration
-    tls:
-      enabled: ""
-
-      ## Name of the secret that contains TLS certificate chain files
-      secretName: ""
-
-      ## Secret mountpoint within the container
-      mountPath: ""
-
-      ## Path to CA certificate file within the container
-      caCert: ""
-
-      ## Path to certificate file within the container
-      cert: ""
-
-      ## Path to key file within the container
-      key: ""
-
-  ## Redis parameters
-  redis:
-    ## Address of the Redis server to use
-    address: ""
-
-    ## Name of the secret containing Redis password
-    secretName: ""
-
-    ## Key in which the password is stored
-    secretPasswordKey: ""
-
   ## taalbot container health check
   livenessProbe: {}
   readinessProbe: {}
@@ -66,3 +28,13 @@ taalbot:
 
   ## Name of the secret containing taalbot secret data, as specified in the README.
   secretName: ""
+
+  bot:
+    commandPrefix: ""
+
+  mongodb:
+    address: ""
+    database: ""
+    username: ""
+    secretName: ""
+    secretPasswordKey: ""

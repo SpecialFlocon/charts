@@ -17,7 +17,7 @@ on a [Kubernetes](http://kubernetes.io) cluster using the
 ## Prerequisites
 
 - Kubernetes 1.8+
-- A working taalapi deployment
+- A running MongoDB database and its user credentials
 - A Discord bot token, obtained via Discord developer portal after creating an
   app
 
@@ -59,22 +59,18 @@ their default values.
 | `taalbot.image.repository`             | taalbot image name                                                                     | `specialflocon/taalbot`                       |
 | `taalbot.image.tag`                    | taalbot image tag                                                                      | `.Chart.AppVersion`                           |
 | `taalbot.image.pullPolicy`             | Image pull policy                                                                      | `Always`                                      |
-| `taalbot.image.args`                   | Container entrypoint arguments                                                         | `[]`                                          |
+| `taalbot.image.args`                   | Container entrypoint arguments                                                         | `["run"]`                                     |
 | `taalbot.resources.limits`             | Container CPU/memory resource limits                                                   | Memory: `64Mi`, CPU: `100m`                   |
 | `taalbot.resources.requests`           | Container CPU/memory resource requests                                                 | Memory: `64Mi`, CPU: `100m`                   |
 | `taalbot.livenessProbe`                | Container liveness probe                                                               | See `values.yaml`                             |
 | `taalbot.readinessProbe`               | Container readiness probe                                                              | See `values.yaml`                             |
 | `taalbot.secretName`                   | Name of the secret containing taalbot secret data                                      | `""`                                          |
-| `taalbot.application.apiServerURL`     | URL to a running API server                                                            | `""`                                          |
-| `taalbot.httpClient.tls.enabled`       | Enable/disable TLS                                                                     | `""`                                          |
-| `taalbot.httpClient.tls.secretName`    | Name of the secret containing TLS certificate chain files                              | `""`                                          |
-| `taalbot.httpClient.tls.mountPath`     | Mountpoint of the TLS secret within the container                                      | `""`                                          |
-| `taalbot.httpClient.tls.caCert`        | Path to a TLS CA certificate file                                                      | `""`                                          |
-| `taalbot.httpClient.tls.cert`          | Path to a TLS certificate file                                                         | `""`                                          |
-| `taalbot.httpClient.tls.key`           | Path to a TLS key file                                                                 | `""`                                          |
-| `taalbot.redis.address`                | Address of the Redis server used as message broker                                     | `""`                                          |
-| `taalbot.redis.secretName`             | Name of the secret containing Redis password                                           | `""`                                          |
-| `taalbot.redis.secretPasswordKey`      | Name of the key holding the password within the secret                                 | `""`                                          |
+| `taalbot.bot.commandPrefix`            | Command prefix used to invoke the bot in the Discord server (e.g. "?", "!")            | `""`                                          |
+| `taalbot.mongodb.address`              | MongoDB server address                                                                 | `""`                                          |
+| `taalbot.mongodb.database`             | MongoDB database name                                                                  | `""`                                          |
+| `taalbot.mongodb.username`             | MongoDB database username                                                              | `""`                                          |
+| `taalbot.mongodb.secretName`           | Name of the secret containing MongoDB password                                         | `""`                                          |
+| `taalbot.mongodb.secretPasswordKey`    | Name of the key within the secret containing MongoDB password                          | `""`                                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm
@@ -95,26 +91,12 @@ $ helm install --name my-release -f values.yaml ./helm-charts/taalbot
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-## API server URL
-
-The `taalbot.apiServerURL` parameter must point to a working `taalapi` instance.
-
 ## Secrets
 
 This chart relies on a secret that must contain at least one key, `bot-token`,
 with plain-text token obtained from Discord Developer Portal. See Discord
 [documentation](https://discord.com/developers/docs/topics/oauth2#bots) for more
 information.
-
-## Redis
-
-Taalbot uses Redis message broker capabilities to implement a PubSub message
-queue between components.
-
-You need to set the `taalbot.redis.address` parameter with the address to a
-running Redis server, as well as the `taalbot.redis.secretName` and
-`taalbot.redis.secretPasswordKey` parameters, respectively corresponding to the
-name of the secret and the name of the key containing the Redis password.
 
 ## Liveness and readiness probes
 
