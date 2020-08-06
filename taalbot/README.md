@@ -66,6 +66,7 @@ their default values.
 | `taalbot.readinessProbe`               | Container readiness probe                                                              | See `values.yaml`                             |
 | `taalbot.secretName`                   | Name of the secret containing taalbot secret data                                      | `""`                                          |
 | `taalbot.bot.commandPrefix`            | Command prefix used to invoke the bot in the Discord server (e.g. "?", "!")            | `""`                                          |
+| `taalbot.bot.ownerID`                  | ID of the bot owner                                                                    | `""`                                          |
 | `taalbot.mongodb.address`              | MongoDB server address                                                                 | `""`                                          |
 | `taalbot.mongodb.database`             | MongoDB database name                                                                  | `""`                                          |
 | `taalbot.mongodb.username`             | MongoDB database username                                                              | `""`                                          |

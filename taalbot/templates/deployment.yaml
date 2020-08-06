@@ -28,6 +28,10 @@ spec:
         - name: TAALBOT_BOT_COMMAND_PREFIX
           value: {{ .Values.taalbot.bot.commandPrefix }}
         {{- end }}
+        {{- if .Values.taalbot.bot.ownerID }}
+        - name: TAALBOT_BOT_OWNER_ID
+          value: {{ .Values.taalbot.bot.ownerID | quote }}
+        {{- end }}
         - name: TAALBOT_DISCORD_BOT_TOKEN
           valueFrom:
             secretKeyRef:
