@@ -38,3 +38,6 @@ taalbot:
     username: ""
     secretName: ""
     secretPasswordKey: ""
+
+  server:
+    logChannel: ""

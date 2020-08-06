@@ -71,6 +71,7 @@ their default values.
 | `taalbot.mongodb.username`             | MongoDB database username                                                              | `""`                                          |
 | `taalbot.mongodb.secretName`           | Name of the secret containing MongoDB password                                         | `""`                                          |
 | `taalbot.mongodb.secretPasswordKey`    | Name of the key within the secret containing MongoDB password                          | `""`                                          |
+| `taalbot.server.logChannel`            | ID of the bot log channel                                                              | `""`                                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm

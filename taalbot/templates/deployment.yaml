@@ -50,6 +50,10 @@ spec:
             secretKeyRef:
               name: {{ .Values.taalbot.mongodb.secretName }}
               key: {{ .Values.taalbot.mongodb.secretPasswordKey }}
+        {{- if .Values.taalbot.server.logChannel }}
+        - name: TAALBOT_SERVER_LOG_CHANNEL
+          value: {{ .Values.taalbot.server.logChannel | quote }}
+        {{- end }}
         {{- if .Values.taalbot.livenessProbe }}
         livenessProbe: {{- toYaml .Values.taalbot.livenessProbe | trim | nindent 10 }}
         {{- end }}
