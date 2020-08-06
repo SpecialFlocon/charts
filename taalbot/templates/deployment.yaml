@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: {{ template "taalbot.name" . }}
-        image: specialflocon/taalbot:latest
+        image: {{ template "taalbot.image" . }}
         imagePullPolicy: {{ .Values.taalbot.image.pullPolicy }}
         {{- if .Values.taalbot.image.args }}
         args:
