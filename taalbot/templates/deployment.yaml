@@ -28,6 +28,10 @@ spec:
         - name: TAALBOT_BOT_COMMAND_PREFIX
           value: {{ .Values.taalbot.bot.commandPrefix }}
         {{- end }}
+        {{- if .Values.taalbot.bot.guildID }}
+        - name: TAALBOT_BOT_GUILD_ID
+          value: {{ .Values.taalbot.bot.guildID | quote }}
+        {{- end }}
         {{- if .Values.taalbot.bot.ownerID }}
         - name: TAALBOT_BOT_OWNER_ID
           value: {{ .Values.taalbot.bot.ownerID | quote }}
@@ -37,6 +41,62 @@ spec:
             secretKeyRef:
               name: {{ .Values.taalbot.secretName }}
               key: bot-token
+        {{- if .Values.taalbot.guild.logChannelID }}
+        - name: TAALBOT_GUILD_LOG_CHANNEL_ID
+          value: {{ .Values.taalbot.guild.logChannelID | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.managerRoleID }}
+        - name: TAALBOT_GUILD_MANAGER_ROLE_ID
+          value: {{ .Values.taalbot.guild.managerRoleID | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.native }}
+        - name: TAALBOT_GUILD_ROLES_NATIVE
+          value: {{ .Values.taalbot.guild.roles.native | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.nl }}
+        - name: TAALBOT_GUILD_ROLES_NL
+          value: {{ .Values.taalbot.guild.roles.nl | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.be }}
+        - name: TAALBOT_GUILD_ROLES_BE
+          value: {{ .Values.taalbot.guild.roles.be | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.sa }}
+        - name: TAALBOT_GUILD_ROLES_SA
+          value: {{ .Values.taalbot.guild.roles.sa | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.levelC }}
+        - name: TAALBOT_GUILD_ROLES_LEVEL_C
+          value: {{ .Values.taalbot.guild.roles.levelC | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.levelB }}
+        - name: TAALBOT_GUILD_ROLES_LEVEL_B
+          value: {{ .Values.taalbot.guild.roles.levelB | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.levelA }}
+        - name: TAALBOT_GUILD_ROLES_LEVEL_A
+          value: {{ .Values.taalbot.guild.roles.levelA | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.levelO }}
+        - name: TAALBOT_GUILD_ROLES_LEVEL_O
+          value: {{ .Values.taalbot.guild.roles.levelO | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.woord }}
+        - name: TAALBOT_GUILD_ROLES_WOORD
+          value: {{ .Values.taalbot.guild.roles.woord | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.sessies }}
+        - name: TAALBOT_GUILD_ROLES_SESSIES
+          value: {{ .Values.taalbot.guild.roles.sessies | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.verbeterMij }}
+        - name: TAALBOT_GUILD_ROLES_VERBETER_MIJ
+          value: {{ .Values.taalbot.guild.roles.verbeterMij | quote }}
+        {{- end }}
+        {{- if .Values.taalbot.guild.roles.bn }}
+        - name: TAALBOT_GUILD_ROLES_BN
+          value: {{ .Values.taalbot.guild.roles.bn | quote }}
+        {{- end }}
         {{- if .Values.taalbot.mongodb.address }}
         - name: TAALBOT_MONGODB_ADDRESS
           value: {{ .Values.taalbot.mongodb.address }}
@@ -54,10 +114,6 @@ spec:
             secretKeyRef:
               name: {{ .Values.taalbot.mongodb.secretName }}
               key: {{ .Values.taalbot.mongodb.secretPasswordKey }}
-        {{- if .Values.taalbot.server.logChannel }}
-        - name: TAALBOT_SERVER_LOG_CHANNEL
-          value: {{ .Values.taalbot.server.logChannel | quote }}
-        {{- end }}
         {{- if .Values.taalbot.livenessProbe }}
         livenessProbe: {{- toYaml .Values.taalbot.livenessProbe | trim | nindent 10 }}
         {{- end }}

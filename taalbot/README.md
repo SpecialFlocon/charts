@@ -66,13 +66,27 @@ their default values.
 | `taalbot.readinessProbe`               | Container readiness probe                                                              | See `values.yaml`                             |
 | `taalbot.secretName`                   | Name of the secret containing taalbot secret data                                      | `""`                                          |
 | `taalbot.bot.commandPrefix`            | Command prefix used to invoke the bot in the Discord server (e.g. "?", "!")            | `""`                                          |
+| `taalbot.bot.guildID`                  | ID of the guild bot runs in                                                            | `""`                                          |
 | `taalbot.bot.ownerID`                  | ID of the bot owner                                                                    | `""`                                          |
+| `taalbot.guild.logChannelID`           | ID of the bot log channel in the guild                                                 | `""`                                          |
+| `taalbot.guild.managerRoleID`          | ID of the manager role in the guild                                                    | `""`                                          |
+| `taalbot.guild.roles.native`           | ID of the "Native" role                                                                | `""`                                          |
+| `taalbot.guild.roles.nl`               | ID of the "NL" role                                                                    | `""`                                          |
+| `taalbot.guild.roles.be`               | ID of the "BE" role                                                                    | `""`                                          |
+| `taalbot.guild.roles.sa`               | ID of the "SA" role                                                                    | `""`                                          |
+| `taalbot.guild.roles.levelC`           | ID of the "Level C" role                                                               | `""`                                          |
+| `taalbot.guild.roles.levelB`           | ID of the "Level B" role                                                               | `""`                                          |
+| `taalbot.guild.roles.levelA`           | ID of the "Level A" role                                                               | `""`                                          |
+| `taalbot.guild.roles.levelO`           | ID of the "Level O" role                                                               | `""`                                          |
+| `taalbot.guild.roles.woord`            | ID of the "Woord" role                                                                 | `""`                                          |
+| `taalbot.guild.roles.sessies`          | ID of the "Sessies" role                                                               | `""`                                          |
+| `taalbot.guild.roles.verbeterMij`      | ID of the "Verbeter mij" role                                                          | `""`                                          |
+| `taalbot.guild.roles.bn`               | ID of the "BN" role                                                                    | `""`                                          |
 | `taalbot.mongodb.address`              | MongoDB server address                                                                 | `""`                                          |
 | `taalbot.mongodb.database`             | MongoDB database name                                                                  | `""`                                          |
 | `taalbot.mongodb.username`             | MongoDB database username                                                              | `""`                                          |
 | `taalbot.mongodb.secretName`           | Name of the secret containing MongoDB password                                         | `""`                                          |
 | `taalbot.mongodb.secretPasswordKey`    | Name of the key within the secret containing MongoDB password                          | `""`                                          |
-| `taalbot.server.logChannel`            | ID of the bot log channel                                                              | `""`                                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm

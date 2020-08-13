@@ -31,7 +31,24 @@ taalbot:
 
   bot:
     commandPrefix: ""
+    guildID: ""
     ownerID: ""
+
+  guild:
+    logChannelID: ""
+    roles:
+      native: ""
+      nl: ""
+      be: ""
+      sa: ""
+      levelC: ""
+      levelB: ""
+      levelA: ""
+      levelO: ""
+      woord: ""
+      sessies: ""
+      verbeterMij: ""
+      bn: ""
 
   mongodb:
     address: ""
@@ -39,6 +56,3 @@ taalbot:
     username: ""
     secretName: ""
     secretPasswordKey: ""
-
-  server:
-    logChannel: ""
