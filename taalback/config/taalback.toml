@@ -1,0 +1,7 @@
+[mongodb]
+address = "{{ .Values.taalback.mongodb.address }}"
+database = "{{ .Values.taalback.mongodb.database }}"
+username = "{{ .Values.taalback.mongodb.username }}"
+
+[server]
+listen_address = "{{ .Values.taalback.server.listenAddress }}"

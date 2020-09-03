@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "taalback.fullname" . }}
+  labels: {{ include "taalback.commonLabels" . | trim | nindent 4 }}
+{{- if .Values.extraLabels }}
+{{ toYaml .Values.extraLabels | trim | indent 4 }}
+{{- end }}
+spec:
+  selector:
+    matchLabels: {{ include "taalback.selectorLabels" . | trim | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ include "taalback.selectorLabels" . | trim | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ template "taalback.name" . }}
+        image: {{ template "taalback.image" . }}
+        imagePullPolicy: {{ .Values.taalback.image.pullPolicy }}
+        {{- if .Values.taalback.image.args }}
+        args:
+        {{- range .Values.taalback.image.args }}
+        - {{ . }}
+        {{- end }}
+        {{- end }}
+        env:
+        - name: TAALBACK_MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.taalback.mongodb.secretName }}
+              key: {{ .Values.taalback.mongodb.secretPasswordKey }}
+        {{- if .Values.taalback.livenessProbe }}
+        livenessProbe: {{- toYaml .Values.taalback.livenessProbe | trim | nindent 10 }}
+        {{- end }}
+        {{- if .Values.taalback.readinessProbe }}
+        readinessProbe: {{- toYaml .Values.taalback.readinessProbe | trim | nindent 10 }}
+        {{- end }}
+        resources: {{- toYaml .Values.taalback.resources | trim | nindent 10 }}
+        volumeMounts:
+        - name: taalback-config
+          mountPath: /etc/taalback
+          readOnly: true
+      {{- if .Values.taalback.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.taalback.image.pullSecrets }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+      volumes:
+      - name: taalback-config
+        configMap:
+          name: {{ template "taalback.fullname" . }}
+          defaultMode: 0640

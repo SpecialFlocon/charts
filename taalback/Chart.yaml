@@ -1,0 +1,10 @@
+apiVersion: v1
+name: taalback
+version: 0.1.0
+appVersion: 0.1.0
+description: Backend for a Discord companion bot of a Dutch learning server.
+type: application
+sources:
+- https://github.com/SpecialFlocon/taalback
+maintainers:
+- name: SpécialFlocon

@@ -1,0 +1,40 @@
+## Image pull secrets
+imagePullSecrets: []
+
+## Extra labels to add to resources
+extraLabels: {}
+
+## taalback configuration
+taalback:
+  ## Image configuration for deployment
+  image:
+    registry: docker.io
+    repository: specialflocon/taalback
+    pullPolicy: Always
+    args: ["run"]
+
+  ## taalbot container health check
+  livenessProbe: {}
+  readinessProbe: {}
+
+  ## Resource requests and limits
+  resources:
+    limits:
+      memory: 128Mi
+      cpu: 100m
+    requests:
+      memory: 128Mi
+      cpu: 100m
+
+  ## Name of the secret containing taalback secret data, as specified in the README.
+  secretName: ""
+
+  mongodb:
+    address: ""
+    database: ""
+    username: ""
+    secretName: ""
+    secretPasswordKey: ""
+
+  server:
+    listenAddress: ""
