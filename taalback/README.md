@@ -69,6 +69,8 @@ and their default values.
 | `taalback.mongodb.username`            | MongoDB database username                                                              | `""`                                          |
 | `taalback.mongodb.secretName`          | Name of the secret containing MongoDB password                                         | `""`                                          |
 | `taalback.mongodb.secretPasswordKey`   | Name of the key within the secret containing MongoDB password                          | `""`                                          |
+| `taalback.server.listenAddress`        | Listening address of the HTTP server                                                   | `""`                                          |
+| `taalback.server.listenPort`           | Listening port of the HTTP server                                                      | `""`                                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm

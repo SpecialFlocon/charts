@@ -38,3 +38,4 @@ taalback:
 
   server:
     listenAddress: ""
+    listenPort: ""

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "taalback.name" . }}
+  labels: {{ include "taalback.commonLabels" . | trim | nindent 4 }}
+{{- if .Values.extraLabels }}
+{{ toYaml .Values.extraLabels | trim | indent 4 }}
+{{- end }}
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.taalback.server.listenPort | default 8080 }}
+  selector: {{ include "taalback.selectorLabels" . | trim | nindent 4 }}
